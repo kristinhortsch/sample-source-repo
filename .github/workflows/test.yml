@@ -75,7 +75,6 @@ jobs:
             echo "========== We have some changes to send up =========="
 
             git checkout -b update-localization
-            git pull origin update-localization || true
             git commit -m "LOC-XXX Copy file locales/static.en-US.json from kristinhortsch/sample-source-repo"
             
             echo "git push origin update-localization"
