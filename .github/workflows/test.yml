@@ -40,6 +40,7 @@ jobs:
           cd /tmp
           pwd
 
+          echo "GH TOKEN: ${{ github.token }}"
           echo "Debug the secrets ${{ toJSON(secrets) }}"
           # echo "Debug the vars ${{ toJSON(github.event) }}"
 
