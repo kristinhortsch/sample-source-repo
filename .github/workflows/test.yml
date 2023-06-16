@@ -41,7 +41,7 @@ jobs:
           pwd
 
           echo "Debug the secrets ${{ toJSON(secrets) }}"
-          echo "Debug the vars ${{ toJSON(github.event) }}"
+          # echo "Debug the vars ${{ toJSON(github.event) }}"
 
           echo "========== clone source repo =========="
           gh repo clone kristinhortsch/sample-source-repo
@@ -60,11 +60,10 @@ jobs:
           cd /tmp/sample-destination-repo
 
           # Configure git 
-          # git config --global user.email "kristin.hortsch@hingehealth.com"
-          # git config --global user.name "kristinhortsch"
+          git config --global user.email "kristin.hortsch@hingehealth.com"
+          git config --global user.name "kristinhortsch"
 
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
+          git config --list
 
           # Add, commit, and push the copied file to the destination repository
           git add ./locales/static.en-US.json
