@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - locales/static.en-US**
 
 jobs:
   copyUpdatedLocaleStringsAndRaisePr:
@@ -33,61 +35,60 @@ jobs:
             echo "Locale strings were not updated changed"
           fi
       
-      - name: Copy updated locale strings and raise PR
-        env:
-          GH_TOKEN: ${{ github.token || secrets.TOKEN || secrets.token }}
-        run: |
-          cd /tmp
-          pwd
+      # - name: Copy updated locale strings and raise PR
+      #   env:
+      #     GH_TOKEN: ${{ github.token || secrets.TOKEN || secrets.token }}
+      #   run: |
+      #     cd /tmp
+      #     pwd
 
-          echo "GH TOKEN: ${{ github.token }}"
-          echo "Debug the secrets ${{ toJSON(secrets) }}"
-          # echo "Debug the vars ${{ toJSON(github.event) }}"
+      #     echo "Debug the secrets ${{ toJSON(secrets) }}"
+      #     # echo "Debug the vars ${{ toJSON(github.event) }}"
 
-          echo "========== clone source repo =========="
-          gh repo clone kristinhortsch/sample-source-repo
+      #     echo "========== clone source repo =========="
+      #     gh repo clone kristinhortsch/sample-source-repo
 
-          echo "========== clone destination repo =========="
-          gh repo clone kristinhortsch/sample-destination-repo
+      #     echo "========== clone destination repo =========="
+      #     gh repo clone kristinhortsch/sample-destination-repo
 
-          echo "========== create destination file directory (in case not present) =========="
-          echo  $(dirname /tmp/sample-destination-repo/locales/static.en-US.json)
-          mkdir -p $(dirname /tmp/sample-destination-repo/locales/static.en-US.json)
+      #     echo "========== create destination file directory (in case not present) =========="
+      #     echo  $(dirname /tmp/sample-destination-repo/locales/static.en-US.json)
+      #     mkdir -p $(dirname /tmp/sample-destination-repo/locales/static.en-US.json)
 
-          echo "========== copy source file --> destination file =========="
-          cp /tmp/sample-source-repo/locales/static.en-US.json /tmp/sample-destination-repo/locales/static.en-US.json
+      #     echo "========== copy source file --> destination file =========="
+      #     cp /tmp/sample-source-repo/locales/static.en-US.json /tmp/sample-destination-repo/locales/static.en-US.json
 
-          echo "========== Now prepare a PR on the destination repo =========="
-          cd /tmp/sample-destination-repo
+      #     echo "========== Now prepare a PR on the destination repo =========="
+      #     cd /tmp/sample-destination-repo
 
-          # Configure git 
-          git config --global user.email "kristin.hortsch@hingehealth.com"
-          git config --global user.name "kristinhortsch"
+      #     # Configure git 
+      #     git config --global user.email "kristin.hortsch@hingehealth.com"
+      #     git config --global user.name "kristinhortsch"
 
-          git config --list
+      #     git config --list
 
-          # Add, commit, and push the copied file to the destination repository
-          git add ./locales/static.en-US.json
-          git status
+      #     # Add, commit, and push the copied file to the destination repository
+      #     git add ./locales/static.en-US.json
+      #     git status
 
-          echo "========== If there are updates then commit and sent up PR =========="
+      #     echo "========== If there are updates then commit and sent up PR =========="
 
-          if [[ $(git status --porcelain | wc -l) -gt 0 ]]; then
-            gh auth setup-git
+      #     if [[ $(git status --porcelain | wc -l) -gt 0 ]]; then
+      #       gh auth setup-git
             
-            echo "========== We have some changes to send up =========="
+      #       echo "========== We have some changes to send up =========="
 
-            git checkout -b update-localization
-            git commit -m "LOC-XXX Copy file locales/static.en-US.json from kristinhortsch/sample-source-repo"
+      #       git checkout -b update-localization
+      #       git commit -m "LOC-XXX Copy file locales/static.en-US.json from kristinhortsch/sample-source-repo"
             
-            echo "git push origin update-localization"
+      #       echo "git push origin update-localization"
             
-            git push origin update-localization
+      #       git push origin update-localization
             
-            echo "Creating a pull request"
+      #       echo "Creating a pull request"
 
-            gh pr create --title "LOC-XXX Copy file from kristinhortsch/sample-source-repo" \
-                        -B main \
-                        -H update-localization \
-                        --body "TEST automated PR creation"
-          fi
+      #       gh pr create --title "LOC-XXX Copy file from kristinhortsch/sample-source-repo" \
+      #                   -B main \
+      #                   -H update-localization \
+      #                   --body "TEST automated PR creation"
+      #     fi
